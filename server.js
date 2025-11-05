@@ -16,15 +16,20 @@ app.post("/chat", async (req, res) => {
     const response = await fetch(HF_URL, {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${HF_API_KEY}`,
-        "Content-Type": "application/json"
+        Authorization: `Bearer ${HF_API_KEY}`,
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ inputs: message })
+      body: JSON.stringify({ inputs: message }),
     });
 
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+
     const data = await response.json();
+
     const reply =
-      data[0]?.generated_text ||
+      (Array.isArray(data) && data[0]?.generated_text) ||
       data.generated_text ||
       "I’m not sure what to say right now.";
 
@@ -35,4 +40,6 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log("✅ Personal Doll server running on port 3000"));
+app.listen(3000, () =>
+  console.log("💬 Personal Doll server running on port 3000")
+);
