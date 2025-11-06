@@ -28,8 +28,8 @@ app.post("/chat", async (req, res) => {
       `Tell me more about "${userMessage}"~`
     ];
 
-    // Pick a random response each time
-    const reply = replies[math.floor(Math.random() * replies.length)] || "💭 I’m thinking...";
+    // ✅ Fixed: "Math" (capital M)
+    const reply = replies[Math.floor(Math.random() * replies.length)] || "💭 I’m thinking...";
 
     res.json({ reply });
   } catch (err) {
